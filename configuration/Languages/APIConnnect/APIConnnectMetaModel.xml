@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<metaModel file_level="builtin" file_no="40909098">
+
+    <category name="APM_APIConnect_Module" rid="0">
+        <description>API Connnect</description>
+        <inheritedCategory name="APM Server Modules" />
+    </category>
+
+    <category name="APM_APIConnect_Artifacts" rid="1">
+        <description>API Connnect Artifacts</description>
+        <inheritedCategory name="APM All Artifacts" />
+        <inheritedCategory name="APM All Language Artifacts" />
+        <inheritedCategory name="APM Client-Server Artifacts" />
+        <inheritedCategory name="APM SQL Artifacts" />
+    </category>
+    
+    <type name="APIConnect_myobject" rid="2">
+        <description>API Connector</description>
+        <inheritedCategory name="UAObject" />
+        <inheritedCategory name="APM_APIConnect_Artifacts" />
+    </type>
+	<type name="APIConnect_queue" rid="3">
+		<description>API Connect Queue</description>
+		<inheritedCategory name="UAObject" />
+		<inheritedCategory name="APM_APIConnect_Artifacts" />
+	</type>	
+	<type name="APIConnect_unknownqueue" rid="4">
+		<description>API Connect Unknown Queue</description>
+		<inheritedCategory name="UAObject" />
+		<inheritedCategory name="APM_APIConnect_Artifacts" />
+	</type>	
+</metaModel>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+    <metadata>
+        <id>my.company.finalplugin</id>
+        <version>1.0.1</version>
+        <title>Projet_Final</title>
+        <authors>CAST Product</authors>
+		<owners>CAST</owners>
+		<licenseUrl>https://help.castsoftware.com/hc/en-us/articles/212612648-AIP-Extension-License</licenseUrl>
+		<projectUrl>http://doc.castsoftware.com/display/DOCEXT/SQL+Analyzer+-+1.2</projectUrl>
+		<iconUrl>https://raw.githubusercontent.com/CAST-Extend/resources/master/com.castsoftware.sqlanalyzer.png</iconUrl>
+		<requireLicenseAcceptance>false</requireLicenseAcceptance>
+		<releaseNotes>JUJU</releaseNotes>
+		<description>JUJU</description>
+		<tags>SQL DDL DML FunctionPoint Quality CAIP8.0 CAIP8.1 CAIP8.2</tags>
+		<dependencies>
+      <dependency id="CAIP" version="8.0.0" />
+      <dependency id="com.castsoftware.internal.platform" version="0.0.5" />
+    </dependencies>
+  </metadata>
+</package>
+ 
