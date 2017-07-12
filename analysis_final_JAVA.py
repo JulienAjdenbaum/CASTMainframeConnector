@@ -22,14 +22,14 @@ class JEEAnnotation(cast.analysers.jee.Extension):
     def start_analysis(self,options):
         cast.analysers.log.warning("analysis started")
         
-    def objetcreation(self,parent,limpor,programme,fonction,callee,typedobj):
+    def objetcreation(self,parent,limpor,programme,fonction,callee,typedobj): #creates the object API connector if needed
         posi = parent.get_position()
         cast.analysers.log.warning(posi.get_file().get_name())
         classcode = AppLevel.takecode(self,posi.get_file(),posi.get_begin_line(),posi.get_begin_column(),posi.get_end_line(),posi.get_end_column) # get the code
         classcodeperline = re.split("\n",classcode)
         ligne = False
         linenumber = None
-        for x in range(len(classcodeperline)):
+        for x in range(len(classcodeperline)):#parses through the code searching for the programm command
             if (re.search(programme+"\(\)", classcodeperline[x])!=None):
                 cast.analysers.log.warning(classcodeperline[x])
                 ligne = True
@@ -40,7 +40,7 @@ class JEEAnnotation(cast.analysers.jee.Extension):
         else:
             cast.analysers.log.warning("No Line Number")
 
-        if (ligne): #si la commande existe
+        if (ligne): #if the line exists
             cast.analysers.log.warning(fonction+" Found")
             impors = AppLevel.takecode(self,posi.get_file(),0,0,posi.get_end_line(),posi.get_end_column)
             impor = re.split("import",impors)
@@ -77,10 +77,10 @@ class JEEAnnotation(cast.analysers.jee.Extension):
                 result = cast.analysers.CustomObject()
                 result.set_type(typedobj)
 #                 result.set_type('JV_METHOD')
-                nom = parent.get_name()+" Cobol prgm " + lastring + "cherche" + callee
+                nom = lastring
+                wsname = parent.get_name()+" Cobol prgm " + lastring + "cherche" + callee
                 cast.analysers.log.warning(nom)
                 result.set_name(nom)
-                wsname = nom + parent.get_name()
                 asdfghjkl = 0
                 for existingObject in self.i: #checks if the object dosn't already exist
                     if(existingObject == wsname):
@@ -119,7 +119,7 @@ class JEEAnnotation(cast.analysers.jee.Extension):
                     else:
                         cast.analysers.create_link('callLink',parent,result,posi)
                         cast.analysers.log.warning("Program n'est pas dans une fonction")
-                    JEEAnnotation.creerobjet(self, "thereisnoprogram"+parent.get_name(), "APIConnect_unknownqueue", parent)
+                    JEEAnnotation.creerobjet(self, parent.get_name()+'unknownqueue', "APIConnect_unknownqueue", parent,"thereisnoprogram"+parent.get_name())
                 else:
                     cast.analysers.log.warning("??????????skiped???????????") #if the link alreqady exists, skip it
             else:
@@ -132,12 +132,12 @@ class JEEAnnotation(cast.analysers.jee.Extension):
         logging.debug(str(_type))
         self.objetcreation(_type,"com.ibm.cics","Program","setName","CAST_COBOL_SavedProgram",'APIConnect_myobject')
         self.objetcreation(_type,"com.ibm.cics","TDQ","setName","CAST_COBOL_SavedProgram",'APIConnect_myobject')
-    def creerobjet(self,name,type1,parent):
+    def creerobjet(self,name,type1,parent,fullname):
         wsname = name + parent.get_name()
         monobjet = cast.analysers.CustomObject()
         monobjet.set_type(type1)
         monobjet.set_name(name)
-        monobjet.set_fullname(wsname)
+        monobjet.set_fullname(fullname)
         monobjet.set_guid(wsname)
         monobjet.set_parent(parent)
         monobjet.save()
@@ -150,11 +150,11 @@ class AppLevel(ApplicationLevelExtension):
         for o in application.objects():
 #             for o in application.objects().has_type('APIConnect_myobject'):
 #                 logging.debug(o.get_name())
-                a = re.search("Cobol prgm (\w+)", o.get_name())
+                a = re.search("Cobol prgm (\w+)", o.get_fullname())
                 
                 if(a!=None):
                     logging.debug("oui1")
-                    logging.debug(o.get_name())
+                    logging.debug(o.get_fullname())
                     nolinkcreated = True
                     a = a.group(1)
                     logging.debug(a)
@@ -162,24 +162,24 @@ class AppLevel(ApplicationLevelExtension):
                     logging.debug(b)
 #                     try:
                     logging.debug(b[1])
-                    print(o.get_name()+" o.get_name()")
+                    print(o.get_fullname()+" o.get_fullname()")
 #                     logging.debug(ob.get_name())
                    
                     for ob in application.objects().has_type(b[1]):
 #                         logging.debug("ob = "+ob.get_name()+"        "+b[0])
                         if (ob.get_name() == b[0]):
-                            logging.debug(ob.get_type()+"        "+ob.get_name()+"    "+o.get_type()+"    "+o.get_name() )
-                            logging.debug("qqqqqqqqqqqqqqqqqqq")
+                            logging.debug(ob.get_type()+"        "+ob.get_name()+"    "+o.get_type()+"    "+o.get_fullname() )
+#                             logging.debug("qqqqqqqqqqqqqqqqqqq")
                             create_link("callLink",o,ob)
                             logging.debug("link created")
                             nolinkcreated = False
                     if(nolinkcreated):
                         logging.debug("oui")
-                        ab = re.search("(.+) Cobol", o.get_name()).group(1)
+                        ab = re.search("(.+) Cobol", o.get_fullname()).group(1)
                         logging.debug("a = "+ab)
                         for ob in application.objects().has_type("APIConnect_unknownqueue"):
-                            print(ob.get_name())
-                            a = re.search("thereisnoprogram"+ab,ob.get_name())
+                            logging.debug(ob.get_fullname())
+                            a = re.search("thereisnoprogram"+ab,ob.get_fullname())
                             if(a != None):
 #                                 logging.debug(a)                            
                                 create_link("callLink", o, ob)

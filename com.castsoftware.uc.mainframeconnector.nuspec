@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
     <metadata>
         <id>com.castsoftware.uc.mainframeconnector</id>
-        <version>0.7</version>
+        <version>0.8</version>
         <title>Mainframe Connector</title>
         <authors>User Community</authors>
 		<owners>CAST</owners>
